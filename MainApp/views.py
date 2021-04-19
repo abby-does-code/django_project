@@ -10,7 +10,7 @@ def index(request):
 
 
 def topics(request):
-    topics = Topic.objects.order_by(
+    topics = topic.objects.order_by(
         "data_added"
     )  # Order by = ascending or descending sort order
 
@@ -22,6 +22,8 @@ def topics(request):
 def topic(request, topic_id):
     topic = Topic.objects.get(id=topic_id)
     entries = topic.entry_set.order_by("-date_added")  # The - puts it in desc order
-    context = {'topic':topic,'entries':entries}
-    
-    return render(request, 'MainApp/topic.html',context)
+    context = {"topic": topic, "entries": entries}
+
+    return render(request, "MainApp/topic.html", context)
+
+def new_topic(request):
