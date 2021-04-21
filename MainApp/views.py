@@ -26,4 +26,4 @@ def topic(request, topic_id):
 
     return render(request, "MainApp/topic.html", context)
 
-def new_topic(request):
+#def new_topic(request):
