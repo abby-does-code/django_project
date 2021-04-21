@@ -5,4 +5,4 @@ class TopicForm(form.ModelForm):
     class Meta: 
         model = Topic
         fields = ['text']
-        label = ["Text":""]
+        label = ["Text: ":""]
