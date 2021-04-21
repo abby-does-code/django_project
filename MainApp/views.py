@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Topic
-from .forms import TopicForm
+from .forms import TopicForm, EntryForm
 
 # Create your views here.
 
@@ -52,12 +52,12 @@ def new_entry(request, topic_id):
         form = EntryForm(data=request.POST)
 
         if form.is_valid():
-            new_entry = form.save(commit=FALSE)
+            new_entry = form.save(commit=False)
             # with new entry, don't have associated topic
             new_entry.topic = topic
             new_entry.save()
             return redirect("MainApp:topic", topic_id=topic_id)
             #  Page 'Topic' requires id; so we pull the topic id from the first line to tell it where to go
-    context = {'form':form,'topic':topic}
+    context = {"form": form, "topic": topic}
     # pass object "topic" instead of id so it will show the topic and pass all attributes
-    return render(request, 'MainApp/new_entry.html',context)
+    return render(request, "MainApp/new_entry.html", context)
