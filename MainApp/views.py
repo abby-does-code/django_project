@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Topic
+from .forms import TopicForm
 
 # Create your views here.
 
@@ -7,16 +8,6 @@ from .models import Topic
 def index(request):
     """The home page for learning_log"""
     return render(request, "MainApp/index.html")
-
-
-def topics(request):
-    topics = topic.objects.order_by(
-        "data_added"
-    )  # Order by = ascending or descending sort order
-
-    context = {"topics": topics}
-    return render(request, "MainApp/topics.html", context)
-    # Context is an additional parameter passed to the index
 
 
 def topic(request, topic_id):
@@ -27,11 +18,20 @@ def topic(request, topic_id):
     return render(request, "MainApp/topic.html", context)
 
 
+def topics(request):
+    topics = Topic.objects.order_by("date_added")
+    # Order by = ascending or descending sort order
+
+    context = {"topics": topics}
+    return render(request, "MainApp/topics.html", context)
+    # Context is an additional parameter passed to the index
+
+
 def new_topic(request):
     if request.method != "POST":
         form = TopicForm()
     else:
-        form = TopicForm(data=reuqest.POST)  # takes info and adds to database
+        form = TopicForm(data=request.POST)  # takes info and adds to database
 
         if form.is_valid():
             form.save()
