@@ -3,6 +3,16 @@
     <a href="{% url 'MainApp:topics' %}">Topics</a>
 </p>
 
+<p>Add a new entry</p>
+
+<form action="{% url 'MainApp:new_entry' topic.id %}" method='post'>
+
+    {% csrf_token %}
+    {{form.as_p}}
+
+    <button name="submit">Add entry</button>
+
+</form>
 
 
 {%block content%}
