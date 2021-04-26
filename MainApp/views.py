@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Topic
+from .models import Topic, Entry
 from .forms import TopicForm, EntryForm
 
 # Create your views here.
@@ -61,3 +61,23 @@ def new_entry(request, topic_id):
     context = {"form": form, "topic": topic}
     # pass object "topic" instead of id so it will show the topic and pass all attributes
     return render(request, "MainApp/new_entry.html", context)
+
+    def edit_entry(request, entry_id):
+        entry = Entry.objects.get(id=entry_id)
+        # dot notation allows us to access the attributes
+        ##This line access teh topic attribute of the entry
+        topic = entry.topic
+
+        if requested.method != "POST":
+            # If it's not post, it's get
+            # If it's not post, we want it to grab the form we already have
+            ##Remember, this is the EDIT entry class!
+            form = EntryForm(instance=entry)
+        else:
+            form = EntryForm(instance=entry, data=request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect("MainApp:topic" topic_id=topic_id)
+                # ^ getting a dynamic topic id based off of what else is in the class
+        context = {'entry':entry, 'topic':topic, 'form': form}
+        return render(request, 'MainApp/edit_entry.html',context)
