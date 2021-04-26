@@ -3,9 +3,9 @@
     <a href="{% url 'MainApp:topics' %}">Topics</a>
     {% if user.is_authenticated %}
     Hello, {{user.username}}.
-    <a href="{% url 'MainApp:logout' %}">Log Out</a>"
+    <a href="{% url 'users:logout' %}">Log Out</a>"
     {% else %}
-    <a href="{% url 'MainApp:login ' %}">Log In</a>
+    <a href="{% url 'users:login' %}">Log In</a>
     {% endif %}
 
 </p>
