@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Topic, Entry
 from .forms import TopicForm, EntryForm
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -18,6 +19,7 @@ def topic(request, topic_id):
     return render(request, "MainApp/topic.html", context)
 
 
+@login_required
 def topics(request):
     topics = Topic.objects.order_by("date_added")
     # Order by = ascending or descending sort order
@@ -27,6 +29,7 @@ def topics(request):
     # Context is an additional parameter passed to the index
 
 
+@login_required
 def new_topic(request):
     if request.method != "POST":
         form = TopicForm()
@@ -44,6 +47,7 @@ def new_topic(request):
     # is_valid() checks to make sure there's not errors on the form; if valid, save
 
 
+@login_required
 def new_entry(request, topic_id):
     topic = Topic.objects.get(id=topic_id)
     if request.method != "POST":  # load a new form
@@ -63,6 +67,7 @@ def new_entry(request, topic_id):
     return render(request, "MainApp/new_entry.html", context)
 
 
+@login_required
 def edit_entry(request, entry_id):
     entry = Entry.objects.get(id=entry_id)
     # dot notation allows us to access the attributes
