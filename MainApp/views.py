@@ -15,8 +15,11 @@ def topic(request, topic_id):
     topic = Topic.objects.get(id=topic_id)
     entries = topic.entry_set.order_by("-date_added")  # The - puts it in desc order
     
+    if topic.owner != request.user: 
+        raise Http404
     
     context = {"topic": topic, "entries": entries}
+
 
     return render(request, "MainApp/topic.html", context)
 
@@ -25,7 +28,6 @@ def topic(request, topic_id):
 def topics(request):
    topics = Topic.objects.filter(owner=request.user).order_by('date_added')
     # Order by = ascending or descending sort order
-
     context = {"topics": topics}
     return render(request, "MainApp/topics.html", context)
     # Context is an additional parameter passed to the index
@@ -39,7 +41,9 @@ def new_topic(request):
         form = TopicForm(data=request.POST)  # takes info and adds to database
 
         if form.is_valid():
-            form.save()
+            new_topic = form.save(commit=False)
+            new_topic.owner = request.user
+            new_topic.save()
 
             return redirect("MainApp:topics")
     context = {"form": form}
@@ -52,6 +56,8 @@ def new_topic(request):
 @login_required
 def new_entry(request, topic_id):
     topic = Topic.objects.get(id=topic_id)
+    if topic.owner != request.user: 
+        raise Http404
     if request.method != "POST":  # load a new form
         form = EntryForm()
     else:
@@ -75,6 +81,8 @@ def edit_entry(request, entry_id):
     # dot notation allows us to access the attributes
     ##This line access teh topic attribute of the entry
     topic = entry.topic
+    if topic.owner != request.user: 
+        raise Http404
 
     if request.method != "POST":
         # If it's not post, it's get
